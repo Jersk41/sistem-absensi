@@ -1,0 +1,25 @@
+services:
+    db:
+        image: mysql:8.1
+        env_file: .env
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE:-laravel}
+            MYSQL_USER: ${DB_USERNAME:-user}
+            MYSQL_PASSWORD: ${DB_PASSWORD:-password}
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-secret}
+        ports:
+            - ${DB_PORT}:3306
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        volumes:
+            - absensi-db:/var/lib/mysql
+            #- ./docker/mysql:/docker-entrypoint-initdb.d:ro
+        healthcheck:
+            test: ['CMD-SHELL', 'mysqladmin ping -h localhost -u root --password=${DB_ROOT_PASSWORD}']
+            interval: 10s
+            timeout: 5s
+            retries: 10
+            start_period: 30s
+
+volumes:
+    absensi-db:
