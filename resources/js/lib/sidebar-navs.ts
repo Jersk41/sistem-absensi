@@ -1,6 +1,7 @@
 import { NavItem } from "@/types";
 import { BookOpen, Folder, LayoutGrid, Users } from "lucide-react";
-import { dashboard, users } from '@/routes';
+import { dashboard } from '@/routes';
+import users from '@/routes/users';
 
 export const mainNavItems: NavItem[] = [
     {
@@ -10,7 +11,7 @@ export const mainNavItems: NavItem[] = [
     },
     {
         title: 'Users',
-        href: users(),
+        href: users.index(),
         icon: Users,
     },
 ];
