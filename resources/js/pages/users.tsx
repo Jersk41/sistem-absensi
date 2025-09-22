@@ -1,9 +1,3 @@
-import { type BreadcrumbItem } from '@/types';
-import {
-    Head,
-    // router,
-    // useForm
-} from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -15,9 +9,11 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { MoreHorizontal } from 'lucide-react';
-import * as userRoute from '@/routes/users';
 import AppLayout from '@/layouts/app-layout';
+import * as userRoute from '@/routes/users';
+import { type BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
+import { MoreHorizontal } from 'lucide-react';
 
 // Definisikan tipe data User
 interface User {
@@ -97,6 +93,6 @@ export default function UsersPage({ users }: UsersIndexProps) {
                     </CardContent>
                 </Card>
             </div>
-        </AppLayout >
+        </AppLayout>
     );
 }

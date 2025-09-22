@@ -1,7 +1,7 @@
-import { NavItem } from "@/types";
-import { BookOpen, Folder, LayoutGrid, Users } from "lucide-react";
 import { dashboard } from '@/routes';
 import users from '@/routes/users';
+import { NavItem } from '@/types';
+import { BookOpen, Folder, LayoutGrid, Users } from 'lucide-react';
 
 export const mainNavItems: NavItem[] = [
     {

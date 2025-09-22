@@ -1,3 +1,5 @@
+import UserController from '@/actions/App/Http/Controllers/UserController';
+import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -6,8 +8,6 @@ import AppLayout from '@/layouts/app-layout';
 import { index } from '@/routes/users';
 import { BreadcrumbItem } from '@/types';
 import { Form, Head } from '@inertiajs/react';
-import InputError from '@/components/input-error';
-import UserController from '@/actions/App/Http/Controllers/UserController';
 import { LoaderCircle } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -31,24 +31,17 @@ export default function CreateUser() {
                     {...UserController.store.form()}
                     resetOnSuccess={['name', 'email', 'password', 'password_confirmation']}
                     disableWhileProcessing
-                    className='grid gap-6'>
+                    className="grid gap-6"
+                >
                     {({ processing, errors }) => (
                         <Card>
                             <CardContent className="space-y-4">
-                                <div className='grid gap-2'>
+                                <div className="grid gap-2">
                                     <Label htmlFor="name">Name</Label>
-                                    <Input
-                                        id="name"
-                                        required
-                                        autoFocus
-                                        tabIndex={1}
-                                        autoComplete="name"
-                                        name="name"
-                                        placeholder="Full name"
-                                    />
+                                    <Input id="name" required autoFocus tabIndex={1} autoComplete="name" name="name" placeholder="Full name" />
                                     <InputError message={errors.name} className="mt-2" />
                                 </div>
-                                <div className='grid gap-2'>
+                                <div className="grid gap-2">
                                     <Label htmlFor="email">Email</Label>
                                     <Input
                                         id="email"
@@ -61,7 +54,7 @@ export default function CreateUser() {
                                     />
                                     <InputError message={errors.email} className="mt-2" />
                                 </div>
-                                <div className='grid gap-2'>
+                                <div className="grid gap-2">
                                     <Label htmlFor="password">Password</Label>
                                     <Input
                                         id="password"
@@ -74,7 +67,7 @@ export default function CreateUser() {
                                     />
                                     <InputError message={errors.password} className="mt-2" />
                                 </div>
-                                <div className='grid gap-2'>
+                                <div className="grid gap-2">
                                     <Label htmlFor="password_confirmation">Confirm Password</Label>
                                     <Input
                                         id="password_confirmation"
@@ -89,7 +82,7 @@ export default function CreateUser() {
                                 </div>
                             </CardContent>
                             <CardFooter>
-                                <Button type="submit" className='' tabIndex={5} disabled={processing}>
+                                <Button type="submit" className="" tabIndex={5} disabled={processing}>
                                     {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                                     {processing ? 'Creating...' : 'Create User'}
                                 </Button>
@@ -98,6 +91,6 @@ export default function CreateUser() {
                     )}
                 </Form>
             </div>
-        </AppLayout >
+        </AppLayout>
     );
 }

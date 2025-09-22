@@ -1,13 +1,8 @@
+import Pagination, { LinksPropsType } from '@/components/pagination';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -16,17 +11,16 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { index, destroy } from '@/routes/users';
+import { destroy, index } from '@/routes/users';
 import { BreadcrumbItem, User } from '@/types';
-import { Head, router, useForm, usePage } from '@inertiajs/react';
-import { AlertCircle, Info, LoaderCircle, LoaderCircleIcon, MoreHorizontal, Pencil, Plus, RefreshCw, Search, SearchIcon, Trash } from 'lucide-react';
 import type { PageProps } from '@inertiajs/core';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
+import { AlertCircle, Info, LoaderCircle, MoreHorizontal, Pencil, Plus, RefreshCw, Search, Trash } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
 import FormUser from './form-user';
-import Pagination, { LinksPropsType } from '@/components/pagination';
-import { Input } from '@/components/ui/input';
 
 interface DataUserProps {
     users: {
@@ -90,7 +84,7 @@ export default function DataUser({ users, filters }: DataUserProps) {
     const handleReset = () => {
         reset();
         router.get(index().url);
-    }
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -101,9 +95,7 @@ export default function DataUser({ users, filters }: DataUserProps) {
                     <DialogHeader>
                         <DialogTitle>{selectedUser ? 'Edit User' : 'Create New User'}</DialogTitle>
                         <DialogDescription>
-                            {selectedUser
-                                ? "Update the user's information below."
-                                : 'Fill out the form below to create a new user.'}
+                            {selectedUser ? "Update the user's information below." : 'Fill out the form below to create a new user.'}
                         </DialogDescription>
                     </DialogHeader>
                     <FormUser user={selectedUser} onSuccess={() => setIsFormOpen(false)} />
@@ -120,25 +112,17 @@ export default function DataUser({ users, filters }: DataUserProps) {
                 )}
                 <Card>
                     <CardHeader className="flex flex-row justify-between">
-                        <form onSubmit={handleSearch} className="flex items-center w-1/3 space-x-2">
-                            <Input
-                                type="text"
-                                value={data.search}
-                                placeholder="Cari user..."
-                                onChange={(e) => setData('search', e.target.value)}
-                            />
+                        <form onSubmit={handleSearch} className="flex w-1/3 items-center space-x-2">
+                            <Input type="text" value={data.search} placeholder="Cari user..." onChange={(e) => setData('search', e.target.value)} />
                             <Button variant="secondary" type="submit" disabled={processing}>
-                                {!processing
-                                    ? <Search className="size-4" />
-                                    : <LoaderCircle className="size-4 animate-spin" />
-                                }  Cari
+                                {!processing ? <Search className="size-4" /> : <LoaderCircle className="size-4 animate-spin" />} Cari
                             </Button>
-                            <Button variant='outline' type="button" onClick={handleReset}>
-                                <RefreshCw className='size-4' /> Reset
+                            <Button variant="outline" type="button" onClick={handleReset}>
+                                <RefreshCw className="size-4" /> Reset
                             </Button>
                         </form>
                         <Button variant="default" onClick={handleCreate}>
-                            <Plus className='size-4' /> Add User
+                            <Plus className="size-4" /> Add User
                         </Button>
                     </CardHeader>
                     <CardContent>
@@ -174,8 +158,7 @@ export default function DataUser({ users, filters }: DataUserProps) {
                                                     <DropdownMenuItem
                                                         onSelect={() =>
                                                             router.delete(destroy(user.id), {
-                                                                onBefore: () =>
-                                                                    confirm('Are you sure you want to delete this user?'),
+                                                                onBefore: () => confirm('Are you sure you want to delete this user?'),
                                                             })
                                                         }
                                                         className="text-red-600 focus:text-red-600"
@@ -189,7 +172,7 @@ export default function DataUser({ users, filters }: DataUserProps) {
                                 ))}
                             </TableBody>
                         </Table>
-                        <div className="flex justify-start mt-8 space-x-2">
+                        <div className="mt-8 flex justify-start space-x-2">
                             <Pagination links={users.links} preserveState />
                         </div>
                     </CardContent>

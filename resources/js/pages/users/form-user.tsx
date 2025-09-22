@@ -1,14 +1,14 @@
+import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { store, update } from '@/routes/users';
 import { User } from '@/types';
 import { useForm } from '@inertiajs/react';
-import InputError from '@/components/input-error';
 import { LoaderCircle } from 'lucide-react';
 import React from 'react';
 
-export default function FormUser({ user, onSuccess }: { user?: User, onSuccess: () => void }) {
+export default function FormUser({ user, onSuccess }: { user?: User; onSuccess: () => void }) {
     const isEdit = !!user;
     const { data, setData, post, put, processing, errors, reset } = useForm({
         name: user?.name || '',
@@ -37,23 +37,12 @@ export default function FormUser({ user, onSuccess }: { user?: User, onSuccess: 
         <form onSubmit={submit} className="space-y-4">
             <div>
                 <Label htmlFor="name">Name</Label>
-                <Input
-                    id="name"
-                    value={data.name}
-                    onChange={(e) => setData('name', e.target.value)}
-                    required
-                />
+                <Input id="name" value={data.name} onChange={(e) => setData('name', e.target.value)} required />
                 <InputError message={errors.name} className="mt-2" />
             </div>
             <div>
                 <Label htmlFor="email">Email</Label>
-                <Input
-                    id="email"
-                    type="email"
-                    value={data.email}
-                    onChange={(e) => setData('email', e.target.value)}
-                    required
-                />
+                <Input id="email" type="email" value={data.email} onChange={(e) => setData('email', e.target.value)} required />
                 <InputError message={errors.email} className="mt-2" />
             </div>
             <div>

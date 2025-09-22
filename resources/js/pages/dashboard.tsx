@@ -17,9 +17,9 @@ export default function Dashboard() {
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border flex justify-center items-center">
-                        <div className=' text-center'>
-                            <div className='text-2xl stroke-neutral-900/20 dark:stroke-neutral-100/20'>Ini Text</div>
+                    <div className="relative flex aspect-video items-center justify-center overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                        <div className="text-center">
+                            <div className="stroke-neutral-900/20 text-2xl dark:stroke-neutral-100/20">Ini Text</div>
                         </div>
                         {/* <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" /> */}
                     </div>
