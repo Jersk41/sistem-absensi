@@ -1,6 +1,6 @@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
     Dialog,
     DialogContent,
@@ -18,16 +18,24 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { index } from '@/routes/users';
+import { index, destroy } from '@/routes/users';
 import { BreadcrumbItem, User } from '@/types';
-import { Head, router, usePage } from '@inertiajs/react';
-import { AlertCircle, Info, MoreHorizontal } from 'lucide-react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
+import { AlertCircle, Info, LoaderCircle, LoaderCircleIcon, MoreHorizontal, Pencil, Plus, RefreshCw, Search, SearchIcon, Trash } from 'lucide-react';
 import type { PageProps } from '@inertiajs/core';
-import { useState } from 'react';
+import { FormEventHandler, useState } from 'react';
 import FormUser from './form-user';
+import Pagination, { LinksPropsType } from '@/components/pagination';
+import { Input } from '@/components/ui/input';
 
 interface DataUserProps {
-    users: Array<User & { delete_url: string }>;
+    users: {
+        data: Array<User>;
+        links: Array<LinksPropsType>;
+    };
+    filters: {
+        search: string;
+    };
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -44,10 +52,15 @@ interface FlashProps extends PageProps {
     };
 }
 
-export default function DataUser({ users }: DataUserProps) {
-    const { flash } = usePage<FlashProps>().props;
+export default function DataUser({ users, filters }: DataUserProps) {
+    const { props } = usePage<FlashProps>();
+    const flash = props.flash;
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState<User | undefined>(undefined);
+
+    const { data, setData, get, processing, reset } = useForm({
+        search: filters.search || '',
+    });
 
     const handleCreate = () => {
         setSelectedUser(undefined);
@@ -58,7 +71,26 @@ export default function DataUser({ users }: DataUserProps) {
         setSelectedUser(user);
         setIsFormOpen(true);
     };
-    console.log(users);
+
+    const handleSearch: FormEventHandler = (e) => {
+        e.preventDefault();
+        get(
+            index({
+                mergeQuery: {
+                    search: data.search,
+                    page: 1,
+                },
+            }).url,
+            {
+                preserveState: true,
+            },
+        );
+    };
+
+    const handleReset = () => {
+        reset();
+        router.get(index().url);
+    }
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -87,11 +119,27 @@ export default function DataUser({ users }: DataUserProps) {
                     </Alert>
                 )}
                 <Card>
-                    <CardHeader>
-                        <div className="flex items-center justify-between">
-                            <CardTitle>Data User</CardTitle>
-                            <Button onClick={handleCreate}>Add User</Button>
-                        </div>
+                    <CardHeader className="flex flex-row justify-between">
+                        <form onSubmit={handleSearch} className="flex items-center w-1/3 space-x-2">
+                            <Input
+                                type="text"
+                                value={data.search}
+                                placeholder="Cari user..."
+                                onChange={(e) => setData('search', e.target.value)}
+                            />
+                            <Button variant="secondary" type="submit" disabled={processing}>
+                                {!processing
+                                    ? <Search className="size-4" />
+                                    : <LoaderCircle className="size-4 animate-spin" />
+                                }  Cari
+                            </Button>
+                            <Button variant='outline' type="button" onClick={handleReset}>
+                                <RefreshCw className='size-4' /> Reset
+                            </Button>
+                        </form>
+                        <Button variant="default" onClick={handleCreate}>
+                            <Plus className='size-4' /> Add User
+                        </Button>
                     </CardHeader>
                     <CardContent>
                         <Table>
@@ -104,9 +152,9 @@ export default function DataUser({ users }: DataUserProps) {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {users.map((user, index) => (
+                                {users.data.map((user: User, i: number) => (
                                     <TableRow key={user.id}>
-                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{i + 1}</TableCell>
                                         <TableCell>{user.name}</TableCell>
                                         <TableCell>{user.email}</TableCell>
                                         <TableCell className="text-right">
@@ -121,18 +169,18 @@ export default function DataUser({ users }: DataUserProps) {
                                                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                                     <DropdownMenuSeparator />
                                                     <DropdownMenuItem onSelect={() => handleEdit(user)}>
-                                                        Edit
+                                                        <Pencil className="size-4" /> Edit
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem
                                                         onSelect={() =>
-                                                            router.delete(user.delete_url, {
+                                                            router.delete(destroy(user.id), {
                                                                 onBefore: () =>
                                                                     confirm('Are you sure you want to delete this user?'),
                                                             })
                                                         }
                                                         className="text-red-600 focus:text-red-600"
                                                     >
-                                                        Delete
+                                                        <Trash className="size-4" /> Delete
                                                     </DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
@@ -141,6 +189,9 @@ export default function DataUser({ users }: DataUserProps) {
                                 ))}
                             </TableBody>
                         </Table>
+                        <div className="flex justify-start mt-8 space-x-2">
+                            <Pagination links={users.links} preserveState />
+                        </div>
                     </CardContent>
                 </Card>
             </div>

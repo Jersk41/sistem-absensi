@@ -14,16 +14,19 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
+        $users = User::query()
+            ->when($request->input('search'), function ($query, $search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            })
+            ->paginate(10)
+            ->withQueryString();
+
         return Inertia::render('users/data-user', [
-            'users' => $users->map(fn($user) => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'delete_url' => route('users.destroy', $user),
-            ]),
+            'users' => $users,
+            'filters' => $request->only(['search']),
         ]);
     }
 
